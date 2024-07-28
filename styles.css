@@ -1,0 +1,14 @@
+html,body {
+  height: 100%;
+
+}
+
+body {  
+  background-image: url('d.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: black;
+  color: white;
+  margin: 0;
+  font-family:"sans-serif";
+}
