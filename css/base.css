@@ -143,3 +143,24 @@ body.theme-ascendant {
 body.theme-wondercave {
   --color-accent: var(--color-wondercave);
 }
+
+/* ------------------------------
+   10. Support Banner (Global)
+   ------------------------------ */
+.support-banner {
+    background: #222;
+    padding: 10px;
+    text-align: center;
+}
+
+.support-banner a {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+
+
+
+
