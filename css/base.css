@@ -1,0 +1,145 @@
+/* ============================================================
+   dcoleman.net — Global Base Styles
+   PhoenixRes Doctrine: Minimal, Deterministic, Identity-Driven
+   ============================================================ */
+
+/* ------------------------------
+   1. CSS Reset (Minimal + Intentional)
+   ------------------------------ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------
+   2. Typography System
+   ------------------------------ */
+:root {
+  --font-main: "MS Gothic", "Segoe UI", sans-serif;
+
+  /* Modular scale */
+  --fs-1: 0.85rem;
+  --fs-2: 1rem;
+  --fs-3: 1.25rem;
+  --fs-4: 1.5rem;
+  --fs-5: 2rem;
+  --fs-6: 3rem;
+
+  /* ------------------------------
+     3. Color System (Identity Tokens)
+     ------------------------------ */
+  --color-bg: #0d0d0d;
+  --color-text: #e6e6e6;
+
+  --color-phoenix: #d72638;      /* PhoenixRes Red */
+  --color-ascendant: #f2c94c;    /* AscendantCore Gold */
+  --color-wondercave: #4a5568;   /* WonderCave Slate */
+
+  --color-accent: #999;
+  --color-link: #e63946;
+  --color-link-hover: #ff6b6b;
+
+  /* ------------------------------
+     4. Spacing System
+     ------------------------------ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+
+  /* ------------------------------
+     5. Radius + Shadows
+     ------------------------------ */
+  --radius-1: 4px;
+  --radius-2: 8px;
+
+  --shadow-1: 0 2px 4px rgba(0,0,0,0.3);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.4);
+
+  /* ------------------------------
+     6. Transitions
+     ------------------------------ */
+  --transition-fast: 150ms ease;
+  --transition-med: 300ms ease;
+  --transition-slow: 600ms ease;
+}
+
+/* ------------------------------
+   7. Global Element Defaults
+   ------------------------------ */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-3);
+}
+
+h1 { font-size: var(--fs-6); }
+h2 { font-size: var(--fs-5); }
+h3 { font-size: var(--fs-4); }
+h4 { font-size: var(--fs-3); }
+
+p {
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-2);
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+/* ------------------------------
+   8. Utility Classes
+   ------------------------------ */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-muted { color: var(--color-accent); }
+
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-5 { margin-top: var(--space-5); }
+
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-5 { margin-bottom: var(--space-5); }
+
+/* ------------------------------
+   9. Realm Identity Hooks
+   ------------------------------ */
+body.theme-phoenix {
+  --color-accent: var(--color-phoenix);
+}
+
+body.theme-ascendant {
+  --color-accent: var(--color-ascendant);
+}
+
+body.theme-wondercave {
+  --color-accent: var(--color-wondercave);
+}
