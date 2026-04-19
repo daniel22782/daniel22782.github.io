@@ -1,5 +1,6 @@
 
-const ENDPOINT = "https://tetravalent.dcoleman.net/council/query";
+const ENDPOINT = "http://192.168.0.135:8000/council/query";
+
 
 const inputEl = document.getElementById("council-input");
 const submitEl = document.getElementById("council-submit");

@@ -1,0 +1,97 @@
+/* ---------------------------------------------------------
+   Mythic Comedy Order — Local Stylesheet
+   Self-contained. No dependencies on global site CSS.
+--------------------------------------------------------- */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #111;
+  color: #eee;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #ffd86b;
+  text-shadow: 0 0 10px #ffb300;
+  margin-bottom: 10px;
+}
+
+p {
+  opacity: 0.8;
+  margin-bottom: 25px;
+}
+
+/* Input Row ------------------------------------------------ */
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+}
+
+.input-row button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  background: #ffb300;
+  color: #111;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.input-row button:hover {
+  background: #ffd86b;
+}
+
+/* Panels --------------------------------------------------- */
+
+.panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.panel {
+  padding: 14px;
+  border-radius: 8px;
+  min-height: 60px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.25s ease;
+}
+
+.panel.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Persona Colors ------------------------------------------ */
+
+.frog { background:#2ecc71; color:#0b3d1f; }
+.dog  { background:#f39c12; color:#3a2500; }
+.cow  { background:#d7ccc8; color:#3e2723; }
+.bird { background:#6c5ce7; color:#f3eaff; }
+
+/* Responsive ---------------------------------------------- */
+
+@media (min-width: 700px) {
+  .panels {
+    grid-template-columns: 1fr 1fr;
+  }
+}
