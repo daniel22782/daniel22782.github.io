@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tetravalent Order of the Phoenix Council</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand">
+      <span class="crest">🜂</span>
+      <span class="brand-text">Tetravalent Order of the Phoenix Council</span>
+    </div>
+    <div class="query-panel">
+      <input
+        id="council-input"
+        type="text"
+        placeholder="Council, what stirs in the deep horizon?"
+        autocomplete="off"
+      />
+      <button id="council-submit">Converge</button>
+    </div>
+  </header>
+
+  <main class="console">
+    <section id="status" class="status-bar">
+      <span id="status-text">Idle.</span>
+    </section>
+
+    <section id="personas" class="persona-grid">
+      <article class="persona-card ignis">
+        <h2>Ignis</h2>
+        <p class="persona-role">Strategic escalation, risk, and opportunity mapping.</p>
+        <pre id="persona-Ignis" class="persona-output"></pre>
+      </article>
+
+      <article class="persona-card aeris">
+        <h2>Aeris</h2>
+        <p class="persona-role">Architecture, systems thinking, and design clarity.</p>
+        <pre id="persona-Aeris" class="persona-output"></pre>
+      </article>
+
+      <article class="persona-card aqua">
+        <h2>Aqua</h2>
+        <p class="persona-role">Operations, reliability, and failure modes.</p>
+        <pre id="persona-Aqua" class="persona-output"></pre>
+      </article>
+
+      <article class="persona-card terra">
+        <h2>Terra</h2>
+        <p class="persona-role">Human factors, ethics, and long-term maintainability.</p>
+        <pre id="persona-Terra" class="persona-output"></pre>
+      </article>
+    </section>
+
+    <section class="lower-panel">
+      <article class="archivist-card">
+        <div class="archivist-header">
+          <h2>The Archivist</h2>
+          <span id="archivist-score" class="archivist-score">Score: —</span>
+        </div>
+        <pre id="archivist-output" class="archivist-output"></pre>
+      </article>
+
+      <article class="synthesis-card">
+        <h2>Council Synthesis</h2>
+        <pre id="synthesis-output" class="synthesis-output"></pre>
+      </article>
+    </section>
+  </main>
+
+  <script src="council.js"></script>
+</body>
+</html>
