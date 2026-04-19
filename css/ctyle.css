@@ -1,0 +1,61 @@
+/* ===== dcoleman.net — operator‑grade minimal theme ===== */
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #0d0d0d;
+    color: #e6e6e6;
+    font-family: Consolas, monospace;
+}
+
+a {
+    color: #66ccff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    margin-bottom: 0;
+    font-size: 2.4rem;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    margin-top: 4px;
+    margin-bottom: 20px;
+    color: #999;
+}
+
+.nav {
+    margin-bottom: 30px;
+}
+.nav a {
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+.panel {
+    background: #1a1a1a;
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 1px solid #333;
+    border-radius: 6px;
+}
+
+.panel h2 {
+    margin-top: 0;
+    color: #66ccff;
+}
+
+ul {
+    list-style-type: square;
+    padding-left: 20px;
+}
