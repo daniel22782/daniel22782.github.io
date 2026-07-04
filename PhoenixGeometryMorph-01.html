@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhoenixGeometryMorph-01</title>
+    <style>
+        :root {
+            --bg-color: #0f111a;
+            --panel-color: #1e2235;
+            --accent-tri: #ff5e97;
+            --accent-circ: #00f0ff;
+            --text-color: #e2e8f0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            background: var(--panel-color);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            width: 380px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--accent-tri), var(--accent-circ));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+        }
+
+        canvas {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .controls {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .label-tri { color: var(--accent-tri); text-shadow: 0 0 10px rgba(255,94,151,0.3); }
+        .label-circ { color: var(--accent-circ); text-shadow: 0 0 10px rgba(0,240,255,0.3); }
+
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #131622;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Slider Thumb Customization */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+            transition: transform 0.1s, background-color 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-audio {
+            background: linear-gradient(135deg, #2e344e, #1a1d29);
+            color: var(--text-color);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.8rem 2rem;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-audio.active {
+            background: linear-gradient(135deg, var(--accent-tri), var(--accent-circ));
+            color: #000;
+            font-weight: 700;
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(0,240,255,0.4);
+        }
+
+        .instructions {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-align: center;
+            max-width: 280px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>PhoenixGeometryMorph-01</h1>
+        
+        <div class="canvas-container">
+            <canvas id="morphCanvas" width="250" height="250"></canvas>
+        </div>
+
+        <div class="controls">
+            <div class="label-container">
+                <span class="label-tri" id="labelTri">TRIANGLE</span>
+                <span style="color: #64748b;">GEOMETRY MORPH</span>
+                <span class="label-circ" id="labelCirc">CIRCLE</span>
+            </div>
+            <div class="slider-wrapper">
+                <input type="range" id="morphSlider" min="0" max="1" step="0.005" value="0">
+            </div>
+        </div>
+
+        <button class="btn-audio" id="audioBtn">START AUDIO</button>
+        
+        <div class="instructions">
+            Click Start, then drag the slider to transform chaotic, asymmetric high-frequency clusters into a stable, harmonic bell tone.
+        </div>
+    </div>
+
+    <script>
+        // --- UI & Canvas Setup ---
+        const canvas = document.getElementById('morphCanvas');
+        const ctx = canvas.getContext('2d');
+        const slider = document.getElementById('morphSlider');
+        const audioBtn = document.getElementById('audioBtn');
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const baseRadius = 80;
+
+        // --- Audio Engine Setup ---
+        let audioCtx = null;
+        let mainGain = null;
+        let isPlaying = false;
+        
+        // Additive Synthesis Parameters
+        const NUM_PARTIALS = 12;
+        let partials = [];
+        const baseFreq = 146.83; // D3 - deep grounding fundamental
+
+        // Define partial configurations
+        // Triangle Profile: Asymmetric spacing, chaotic high frequencies
+        const triRatios = [1.0, 1.87, 2.34, 3.11, 3.98, 4.41, 5.23, 6.07, 7.39, 8.12, 9.56, 11.23];
+        // Circle Profile: Symmetrical, clean integer/bell-like partials (overtones of a circular membrane/cylinder approximation)
+        const circRatios = [1.0, 2.00, 3.00, 4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 10.00, 11.00, 12.00];
+
+        function initAudio() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            mainGain = audioCtx.createGain();
+            mainGain.gain.setValueAtTime(0, audioCtx.currentTime);
+            mainGain.connect(audioCtx.destination);
+
+            // Create partials
+            for (let i = 0; i < NUM_PARTIALS; i++) {
+                let osc = audioCtx.createOscillator();
+                let gainNode = audioCtx.createGain();
+                
+                // Pure sine waves built up to create complex structures
+                osc.type = 'sine';
+                
+                // Initial frequency and gain values based on Triangle setup
+                osc.frequency.setValueAtTime(baseFreq * triRatios[i], audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                
+                osc.connect(gainNode);
+                gainNode.connect(mainGain);
+                osc.start();
+
+                partials.push({
+                    osc: osc,
+                    gainNode: gainNode,
+                    index: i
+                });
+            }
+            updateAudioParameters(0);
+        }
+
+        function updateAudioParameters(morphValue) {
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+
+            partials.forEach((p, i) => {
+                // 1. Frequency Morphing (Asymmetric -> Symmetrical Spacing)
+                const targetRatio = (1 - morphValue) * triRatios[i] + morphValue * circRatios[i];
+                // Introduce subtle microtonal jitter at the triangle end for "shimmer/chaos"
+                const chaosJitter = (1 - morphValue) * (Math.sin(now * (15 + i)) * 3.5); 
+                p.osc.frequency.setTargetAtTime((baseFreq * targetRatio) + chaosJitter, now, 0.03);
+
+                // 2. Gain/Resonance Profile Morphing
+                let targetGain = 0;
+                if (i === 0) {
+                    targetGain = 0.4; // Solid fundamental always present
+                } else {
+                    // Triangle has dense, messy high-frequency distribution
+                    const triGain = 0.25 / Math.sqrt(i);
+                    // Circle decays beautifully and smoothly into clean harmonized families
+                    const circGain = i % 2 === 0 ? 0.2 / i : 0.05 / i; 
+                    
+                    targetGain = (1 - morphValue) * triGain + morphValue * circGain;
+                }
+
+                // Apply an overall dampening to extremely high messy frequencies as morph approaches circle
+                if (i > 6) {
+                    targetGain *= (1 - (morphValue * 0.4));
+                }
+
+                p.gainNode.gain.setTargetAtTime(targetGain / NUM_PARTIALS, now, 0.05);
+            });
+        }
+
+        // --- Visual Render Loop ---
+        function draw(morphValue) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Dynamic color blending based on morph state
+            const r = Math.floor((1 - morphValue) * 255 + morphValue * 0);
+            const g = Math.floor((1 - morphValue) * 94 + morphValue * 240);
+            const b = Math.floor((1 - morphValue) * 151 + morphValue * 255);
+            const activeColor = `rgb(${r}, ${g}, ${b})`;
+
+            // Draw Glow
+            ctx.shadowBlur = 20 + (1 - morphValue) * 15 * Math.sin(Date.now() * 0.02); // Chaotic shimmering glow at 0
+            ctx.shadowColor = activeColor;
+
+            ctx.beginPath();
+            
+            const totalPoints = 120; // High resolution to handle smooth transitions
+            for (let i = 0; i <= totalPoints; i++) {
+                const angle = (i / totalPoints) * Math.PI * 2;
+
+                // 1. Pure Circle Radius Vector
+                const circleRadius = baseRadius;
+
+                // 2. Pure Triangle Radius Vector using polar equations
+                // A triangle has 3-fold symmetry, so map angle to 3 segments
+                const triAngle = angle + Math.PI/2; // Orient vertex upwards
+                const n = 3; 
+                const phi = Math.PI / n;
+                // Formula for flat side distances in polar space
+                const triRadius = baseRadius * 0.7 * (Math.cos(phi) / Math.cos((triAngle % (2 * phi)) - phi));
+
+                // Linear interpolation between Triangle and Circle shapes
+                let finalRadius = (1 - morphValue) * triRadius + morphValue * circleRadius;
+
+                // Inject geometric Micro-shimmer/Noise on corners if closer to Triangle
+                if (morphValue < 0.8) {
+                    const noiseAmount = (1 - morphValue) * 2.5;
+                    // Higher frequency noise focused around localized nodes
+                    finalRadius += Math.sin(angle * 24 + Date.now() * 0.03) * noiseAmount;
+                }
+
+                const x = centerX + finalRadius * Math.cos(angle);
+                const y = centerY + finalRadius * Math.sin(angle);
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+
+            ctx.closePath();
+            ctx.strokeStyle = activeColor;
+            ctx.lineWidth = 3.5 + (1 - morphValue) * 1.5; // Slightly thicker/rawer look at triangle phase
+            ctx.stroke();
+
+            // Subtle interior fill
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.04)`;
+            ctx.fill();
+            
+            ctx.shadowBlur = 0; // Reset for performance
+        }
+
+        // Run perpetual render loop for noise animation stability
+        function tick() {
+            const val = parseFloat(slider.value);
+            draw(val);
+            if (isPlaying) {
+                updateAudioParameters(val);
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // --- Event Listeners ---
+        audioBtn.addEventListener('click', () => {
+            if (!audioCtx) {
+                initAudio();
+            }
+
+            if (!isPlaying) {
+                audioCtx.resume();
+                mainGain.gain.setTargetAtTime(0.7, audioCtx.currentTime, 0.1);
+                audioBtn.textContent = "STOP AUDIO";
+                audioBtn.classList.add('active');
+                isPlaying = true;
+            } else {
+                mainGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+                audioBtn.textContent = "START AUDIO";
+                audioBtn.classList.remove('active');
+                isPlaying = false;
+            }
+        });
+
+        slider.addEventListener('input', (e) => {
+            // Visual indicators adjustment mapping opacity to emphasize focus
+            const val = parseFloat(e.target.value);
+            document.getElementById('labelTri').style.opacity = 0.3 + (1 - val) * 0.7;
+            document.getElementById('labelCirc').style.opacity = 0.3 + val * 0.7;
+        });
+
+        // Initialize state
+        tick();
+    </script>
+</body>
+</html>
